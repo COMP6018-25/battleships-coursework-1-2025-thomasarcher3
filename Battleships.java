@@ -10,9 +10,9 @@ public class Battleships {
             BattleshipsCLI.start();
         } else {
             SwingUtilities.invokeLater((() -> {
-                GameView view = new BattleshipsGUI(model,null);
-                GameController controller = new BattleshipsGUI(model,view);
-                ((BattleshipsGUI)view).setController(controller);
+                BattleshipsGUI view = new BattleshipsGUI(model);
+                GameController controller = new BattleshipsGUIController(model, view);
+                view.setController(controller);
                 controller.startGame();
             }));
         }
