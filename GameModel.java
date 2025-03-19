@@ -1,10 +1,10 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
+import java.io.IOException;
+import java.io.FileReader;
+import java.io.BufferedReader;
 
-public class GameModel {
+
+public class GameModel extends Observable {
     public static final int BOARD_SIZE = 10;
     public static final int Carrier_Size = 5;
     public static final int BattleShip_Size = 4;
@@ -79,6 +79,8 @@ public class GameModel {
         ShipsLeft = totalShips;
     }
 
+
+
     private void placeShipsRandomly(int shipSize) {
         Random random = new Random();
         boolean placed = false;
@@ -90,6 +92,46 @@ public class GameModel {
                 placeShip(row, col, shipSize, isHorizontal);
                 placed = true;
             }
+        }
+    }
+
+    private void placeShipsFromaFile(String filePath) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        String line;
+        int totalShips = 0;
+        while ((line = br.readLine()) != null) {
+            if (line.trim().isEmpty() || line.trim().startsWith("#")) {
+                continue;
+            }
+            String[] parts = line.split(",");
+            if (parts.length != 4) {
+                continue;
+            }
+
+            try {
+                ShipType shipType = ShipType.valueOf(parts[0].toUpperCase());
+                int row = parts[1].toUpperCase().charAt(0) - 'A';
+                int col = Integer.parseInt(parts[2]) - 1;
+                boolean isHorizontal = parts[3].equalsIgnoreCase("H");
+                if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
+                    continue;
+                }
+
+                if (canPlaceShip(row, col, shipType.getSize(), isHorizontal)) {
+                    placeShip(row, col, shipType.getSize(), isHorizontal);
+                    totalShips++;
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid ship type");
+            }
+        }
+
+        br.close();
+
+        if (totalShips == 0) {
+            CreateAndPlaceShips();
+        } else {
+            ShipsLeft = totalShips;
         }
     }
 
@@ -131,6 +173,7 @@ public class GameModel {
 
         shotsFired++;
 
+
         if (board[row][col] == CellStates.SHIP) {
             playerView[row][col] = CellStates.HIT;
             Ship hitShip = null;
@@ -143,12 +186,18 @@ public class GameModel {
 
             if (hitShip != null && hitShip.isSunk()) {
                 ShipsLeft = ShipsLeft - 1;
+                setChanged();
+                notifyObservers("HIT");
             }
             return true;
         } else {
             playerView[row][col] = CellStates.MISS;
+            setChanged();
+            notifyObservers("MISS");
             return false;
         }
+
+
     }
 
     public boolean isGameOver() {
