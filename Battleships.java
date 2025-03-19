@@ -7,7 +7,7 @@ public class Battleships {
 
         if (cliMode) {
             BattleshipsCLI cli = new BattleshipsCLI(model);
-            BattleshipsCLI.start();
+            cli.start();
         } else {
             SwingUtilities.invokeLater((() -> {
                 BattleshipsGUI view = new BattleshipsGUI(model);

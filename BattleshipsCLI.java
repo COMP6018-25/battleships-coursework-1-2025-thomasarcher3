@@ -9,7 +9,7 @@ public class BattleshipsCLI {
         this.scanner = new Scanner(System.in);
     }
 
-    public static void start() {
+    public void start() {
 
         System.out.println("enter coordinates to fire the first shot");
         boolean gameRunning = true;

@@ -10,7 +10,7 @@ public class BattleshipsGUIController implements GameController {
     @Override
     public void handleInput(String input) {
         try {
-            int row = input.charAt(0) - '0';
+            int row = input.charAt(0) - 'A';
             int col = Integer.parseInt(input.substring(1)) - 1;
             if (row < 0 || row >= GameModel.BOARD_SIZE || col < 0 || col >= GameModel.BOARD_SIZE) {
                 view.showMessage("Invalid row/col number");

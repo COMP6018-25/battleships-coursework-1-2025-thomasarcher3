@@ -135,6 +135,27 @@ public class GameModel extends Observable {
         }
     }
 
+    public void loadShipsfromaFile(String filePath) throws IOException {
+        try {
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                for (int j = 0; j < BOARD_SIZE; j++) {
+                    board[i][j] = CellStates.EMPTY;
+                    playerView[i][j] = CellStates.EMPTY;
+                }
+            }
+            ships.clear();
+            shotsFired = 0;
+            shotsLeft = BOARD_SIZE * BOARD_SIZE;
+            placeShipsFromaFile(filePath);
+            setChanged();
+            notifyObservers();
+            System.out.println("Loading ships from file: " + filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private boolean canPlaceShip(int row, int col, int size, boolean horizontal) {
         if(horizontal) {
             if (col + size > BOARD_SIZE) return false;
