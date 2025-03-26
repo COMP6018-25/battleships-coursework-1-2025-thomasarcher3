@@ -104,6 +104,7 @@ public class GameModel extends Observable {
                 continue;
             }
             String[] parts = line.split(",");
+            assert parts.length == 4 : "Ship format not in the correct format";
             if (parts.length != 4) {
                 continue;
             }
@@ -146,6 +147,7 @@ public class GameModel extends Observable {
             ships.clear();
             shotsFired = 0;
             shotsLeft = BOARD_SIZE * BOARD_SIZE;
+            assert ShipsLeft > 0 : "No ships have been placed";
             placeShipsFromaFile(filePath);
             setChanged();
             notifyObservers();
@@ -172,6 +174,7 @@ public class GameModel extends Observable {
     }
 
     private void placeShip(int row, int col, int size, boolean horizontal) {
+
         Ship ship = new Ship(size);
         ships.add(ship);
 
@@ -184,6 +187,8 @@ public class GameModel extends Observable {
     }
 
     public boolean fireShot(int row, int col) {
+        assert row >=0 && row < BOARD_SIZE : "Row out of bounds";
+        assert col >=0 && col < BOARD_SIZE : "Col out of bounds";
         if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
             return false;
         }
@@ -222,6 +227,7 @@ public class GameModel extends Observable {
     }
 
     public boolean isGameOver() {
+        assert ShipsLeft >= 0 : "ship count is negative";
         return ShipsLeft == 0;
     }
 
