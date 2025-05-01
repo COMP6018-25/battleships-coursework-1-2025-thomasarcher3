@@ -12,7 +12,7 @@ public class BattleshipsCLI {
 
     public void start() {
         System.out.println("Press 1 to place ships onto the game board from a file");
-        System.out.println("Press 2 to place ships randomly");
+        System.out.println("Press 2 to place ships randomlly");
         String userInput = scanner.nextLine().trim();
         if (userInput.equals("1")) {
             loadShipsFromaFile();

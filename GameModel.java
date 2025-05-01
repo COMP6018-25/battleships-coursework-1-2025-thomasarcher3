@@ -11,6 +11,8 @@ public class GameModel extends Observable {
     public static final int Cruiser_Size = 3;
     public static final int Destroyer_Size = 2;
 
+
+
     public enum CellStates {
         EMPTY,
         SHIP,
@@ -268,6 +270,19 @@ public class GameModel extends Observable {
         }
     }
 
+    public CellStates getBoardState(int row, int col) {
+        return board[row][col];
+    }
+
+    public boolean isShipSunk(int row, int col) {
+        for(Ship ship : ships) {
+            if (ship.isHit(row, col)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private class Position {
         private int row;
@@ -277,6 +292,8 @@ public class GameModel extends Observable {
             this.row = row;
             this.col = col;
         }
+
+
 
         @Override
         public boolean equals(Object obj) {
